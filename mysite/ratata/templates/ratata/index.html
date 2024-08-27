@@ -1,10 +1,15 @@
 {% extends "ratata/base.html" %}
+{% load static %}
 
 {% block title %}Ratata{% endblock %}
 
 {% block content %}
-<h1>Welcome to Ratata</h1>
-{% include "ratata/components/account_create_form.html" %}
-{% include "ratata/components/accounts_list.html"%}
+<header>
+	<h1>Welcome to Ratata</h1>
+</header>
 
+<div id="signup-login">
+	<a href="#" class="btn btn-secondary">Sign Up</button>
+	<a href="login" class="btn btn-primary">Log In</button></a>
+</div>
 {% endblock %}

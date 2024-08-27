@@ -1,0 +1,11 @@
+{% extends 'ratata/base.html' %}
+{% block title %}Ratata{% endblock %}
+
+{% block content %}
+
+<h1>Hello, {{ user.get_username }}</h1>
+<h2>Your Accounts</h2>
+{% include "ratata/components/account_create_form.html" with account_create_form=account_create_form %}
+{% include "ratata/components/accounts_list.html"%}
+
+{% endblock %}

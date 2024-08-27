@@ -1,0 +1,51 @@
+html {
+	--primary-color: rgb(0, 0, 0);
+	--background: #FFF;
+}
+body {
+	background-color: #777;
+}
+
+header {
+	text-align: center;
+}
+
+.btn {
+	border: solid;
+	border-width: 2px;
+	padding: 10px;
+	border-radius: 5px;
+	font-size: 1rem;
+	font-weight: 600;
+	cursor: pointer;
+	text-decoration: none;
+}
+
+.btn-primary {
+	color: var(--background);
+	background-color: var(--primary-color);
+	border-color: var(--primary-color);
+}
+
+.btn-primary:hover {
+	background-color: var(--background);
+	color: var(--primary-color);
+}
+
+.btn-secondary {
+	background-color: var(--background);
+	color: var(--primary-color);
+	border-color: var(--primary-color);
+}
+
+.btn-secondary:hover {
+	background-color: var(--primary-color);
+	color: var(--background);
+}
+
+#signup-login {
+	text-align: center;
+	display: flex;
+	justify-content: center;
+	gap: 10px;
+}

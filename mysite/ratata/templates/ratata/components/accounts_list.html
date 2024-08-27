@@ -1,6 +1,6 @@
-<ul id="accounts_list" hx-get="accounts" hx-trigger="newAccount from:body"  hx-swap="outerHTML">
+<ul id="accounts_list" hx-get="/ratata/accounts" hx-trigger="newAccount from:body"  hx-swap="outerHTML">
 	{% for account in accounts %}
-	<li><a href="accounts/{{account.id}}">{{ account.name }}</a></li>
+	<li><a href="/ratata/accounts/{{account.id}}">{{ account.name }}</a></li>
 	{% endfor %}
 	
 </ul>

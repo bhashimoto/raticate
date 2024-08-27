@@ -1,0 +1,10 @@
+{% extends 'ratata/base.html' %}
+{% block title %}Log in{% endblock %}
+
+{% block content %}
+<form action="" method="post">
+	{% csrf_token %}
+	{{ form }}
+	<input type="submit" name="login" value="Log In">
+</form>
+{% endblock %}
