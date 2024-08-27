@@ -10,7 +10,7 @@
 	</head>
 	<body>
 		<nav>
-			<a href="/ratata">Home</a>
+			<a href={%if not user.is_authenticated%}"/ratata"{%else%}"/ratata/home"{%endif%}>Home</a>
 			{% if user.is_authenticated %}
 			<a href="/ratata/logout">log out</a>
 			{% endif %}
