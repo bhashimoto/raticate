@@ -15,3 +15,5 @@ class Transaction(models.Model):
     description = models.CharField(max_length=200)
     created_at = models.DateTimeField(auto_now=True)
     updated_at = models.DateTimeField(auto_now=True)
+    account = models.ForeignKey(Account,default=1,  on_delete=models.CASCADE)
+    amount = models.DecimalField(blank=False, default=0.0, decimal_places=2, max_digits=12)

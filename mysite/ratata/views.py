@@ -4,8 +4,8 @@ from django.shortcuts import get_object_or_404, render, redirect
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required
 
-from .forms import AccountForm, LoginForm, SignupForm
-from .models import Account
+from .forms import AccountForm, LoginForm, SignupForm, TransactionForm
+from .models import Account, Transaction
 
 # Create your views here.
 def index(request):
@@ -60,7 +60,9 @@ def home(request):
 @login_required
 def account(request, account_id):
     account = get_object_or_404(Account, pk=account_id)
-    return render(request, "ratata/account.html", {"account": account})
+    transactions = Transaction.objects.filter(account=account)
+    transaction_form = TransactionForm
+    return render(request, "ratata/account.html", {"account": account, "transactions":transactions , "transaction_create_form": transaction_form})
 
 
 @login_required
@@ -79,4 +81,24 @@ def accounts(request):
     else:
         accounts = Account.objects.filter(users=request.user)
         return render(request, "ratata/components/accounts_list.html", {"accounts": accounts})
+
+@login_required
+def transactions(request, account_id):
+    if request.method == "POST":
+        try:
+            form = TransactionForm(request.POST)
+            if form.is_valid():
+                account = Account.objects.get(pk=account_id)
+                description = form.cleaned_data["description"]
+                amount = form.cleaned_data["amount"]
+                Transaction.objects.create(description=description, amount=amount, account=account)
+                response = HttpResponse()
+                response.headers["HX-Trigger"] = "newTransaction"
+                return response
+        except:
+            return "error"
+    else:
+        transactions = Transaction.objects.filter(account = Account.objects.get(pk=account_id))
+        return render(request, "ratata/components/transactions_list.html", {"transactions": transactions})
+
 

@@ -3,5 +3,28 @@
 
 {% block content %}
 <h1>{{account.name}}</h1>
+<section>
+	<h2>Members</h2>
+	{% if not account.users.all %}
+	No members found for this account, start adding people!
+	{% else %}
+	<ul>
+		{% for member in account.users.all %}
+		<li>{{ member.username }}</li>
+		{% endfor %}
+	</ul>
+	{% endif %}
+</section>
+
+<section>
+	<h2>Payments</h2>
+</section>
+
+<section>
+	<h2>Transactions</h2>
+	{% include "ratata/components/transaction_create_form.html"%}
+	{% include "ratata/components/transactions_list.html" %}
+</section>
+
 
 {% endblock %}
