@@ -5,15 +5,8 @@
 <h1>{{account.name}}</h1>
 <section>
 	<h2>Members</h2>
-	{% if not account.users.all %}
-	No members found for this account, start adding people!
-	{% else %}
-	<ul>
-		{% for member in account.users.all %}
-		<li>{{ member.username }}</li>
-		{% endfor %}
-	</ul>
-	{% endif %}
+	{% include "ratata/components/account_members_list.html"%}
+	{% include "ratata/components/account_members_create_form.html" %}
 </section>
 
 <section>

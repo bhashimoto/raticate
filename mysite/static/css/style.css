@@ -11,10 +11,18 @@ header {
 	text-align: center;
 }
 
+input {
+	border-radius: 5px;
+	box-shadow: none;
+	border: 2;
+	border-color: #AAA;
+	border-style: solid;
+}
+
 .btn {
 	border: solid;
 	border-width: 2px;
-	padding: 10px;
+	padding: 5px 10px;
 	border-radius: 5px;
 	font-size: 1rem;
 	font-weight: 600;
