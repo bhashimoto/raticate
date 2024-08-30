@@ -26,7 +26,7 @@ class TransactionForm(forms.Form):
         self.fields['paid_by'].queryset = account.users.all()
 
 class AccountMemberForm(forms.Form):
-    members = forms.ModelMultipleChoiceField(label="users", queryset=None)
+    members = forms.ModelMultipleChoiceField(label="users",required=False, queryset=None)
     def __init__(self, *args, **kwargs):
         account = kwargs.pop('account')
         super().__init__(*args,**kwargs)

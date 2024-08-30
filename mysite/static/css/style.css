@@ -30,7 +30,7 @@ header {
 	text-align: center;
 }
 
-input {
+input, select {
 	border-radius: 5px;
 	padding: 5px;
 	box-shadow: none;
@@ -40,9 +40,6 @@ input {
 	background-color: var(--background);
 }
 
-select {
-	background-color: var(--background);
-}
 
 button {
 	border-radius: 5px;
