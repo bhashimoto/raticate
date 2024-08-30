@@ -17,10 +17,12 @@ class Transaction(models.Model):
     updated_at = models.DateTimeField(auto_now=True)
     account = models.ForeignKey(Account,default=1,  on_delete=models.CASCADE)
     amount = models.DecimalField(blank=False, default=0.0, decimal_places=2, max_digits=12)
+    paid_by = models.ForeignKey(User, default=1, on_delete=models.CASCADE)
 
 class Debt(models.Model):
-    transaction = models.ForeignKey(Transaction, on_delete=models.CASCADE)
-    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    transaction = models.ForeignKey(Transaction, on_delete=models.CASCADE, related_name="debts")
+    who_owes = models.ForeignKey(User, default=1, on_delete=models.CASCADE, related_name="who_owes")
+    paid_by = models.ForeignKey(User, default=1, on_delete=models.CASCADE, related_name="paid_by")
     created_at = models.DateTimeField(auto_now=True)
     updated_at = models.DateTimeField(auto_now=True)
     amount = models.DecimalField(blank=False, default=0.0, decimal_places=2, max_digits=12)

@@ -1,14 +1,27 @@
 <table hx-get="/ratata/accounts/{{ account.id }}/transactions" hx-trigger="newTransaction from:body">
+	{% if transactions %}
 	<tr>
 		<th>Date</th>
 		<th>Description</th>
 		<th>Value</th>
+		<th>Paid By</th>
+		<th>Split between</th>
 	</tr>
 	{% for transaction in transactions%}
 	<tr>
 		<td>{{ transaction.created_at|date:"d/m/Y" }}</td>
 		<td>{{ transaction.description }}</td>
 		<td>{{ transaction.amount}}</td>
+		<td>{{ transaction.paid_by.username}}</td>
+		<td>
+			<ul class="no-bullet">
+			{% for debt in transaction.debts.all %}
+			<li>{{ debt.who_owes.username}}</li>
+			{%endfor%}
+			</ul>
+
+		</td>
 	</tr>
 	{% endfor %}
+	{% endif %}
 </table>

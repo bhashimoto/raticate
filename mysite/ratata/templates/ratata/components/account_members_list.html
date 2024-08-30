@@ -2,7 +2,7 @@
 	{% if not account.users.all %}
 	No members found for this account, start adding people!
 	{% else %}
-	<ul>
+	<ul class="no-bullet">
 		{% for member in account.users.all %}
 		<li>{{ member.username }}</li>
 		{% endfor %}

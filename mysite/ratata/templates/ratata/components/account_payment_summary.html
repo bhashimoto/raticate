@@ -1,0 +1,11 @@
+<div hx-get="/ratata/accounts/{{ account.id }}/payments" hx-trigger="newTransaction from:body">
+    {% if not payments %}
+    <p>All good!</p>
+{% else %}
+<ul class="no-bullet">
+    {% for payment in payments %}
+    <li>{{ payment.from }} owes {{ payment.amount }} to {{ payment.to }}</li>
+    {% endfor %}
+</ul>
+{% endif %}
+</div>

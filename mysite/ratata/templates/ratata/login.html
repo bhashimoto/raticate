@@ -5,6 +5,9 @@
 <form action="" method="post">
 	{% csrf_token %}
 	{{ form }}
-	<input type="submit" name="login" value="Log In">
+	<input class="btn btn-primary" type="submit" name="login" value="Log In">
 </form>
+{% if error %}
+{{ error }}
+{% endif %}
 {% endblock %}
