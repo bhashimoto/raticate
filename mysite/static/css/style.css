@@ -1,15 +1,16 @@
 * {
 	margin:0px;
 	padding: 0px;
+	color: var(--primary-color);
 }
 
 html {
-	--primary-color: rgb(0, 0, 0);
-	--background: #FFF;
+	--primary-color: rgb(223, 223, 223);
+	--background: #313131;
 }
 
 body {
-	background-color: #a7a7a7;
+	background-color: #000000;
 	font-family: Arial, Helvetica, sans-serif;
 }
 
@@ -36,6 +37,11 @@ input {
 	border: 2;
 	border-color: #AAA;
 	border-style: solid;
+	background-color: var(--background);
+}
+
+select {
+	background-color: var(--background);
 }
 
 button {
