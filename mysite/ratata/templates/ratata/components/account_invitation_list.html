@@ -1,0 +1,20 @@
+{% if invitations %}
+<section class="card" hx-get="/ratata/invitations" hx-trigger="invitationUpdate from:body" hx-swap="outerHTML">
+    <h2>Invitations</h2>
+    <ul class="no-bullet">
+        {% for invitation in invitations %}
+            <li>
+                <form>
+                    {% csrf_token %}
+                    <button 
+                    class="btn btn-primary"
+                    type="submit"
+                    hx-post="/ratata/invitations/{{invitation.id}}"
+                    hx-swap="none"
+                    >accept</button> {{ invitation.account.name }}
+                </form>
+            </li>
+        {% endfor %}
+    </ul>
+</section>
+{% endif %}

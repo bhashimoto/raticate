@@ -6,7 +6,7 @@ from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required
 
 from .forms import AccountForm, AccountMemberForm, LoginForm, SignupForm, TransactionForm
-from .models import Account, Transaction, Debt
+from .models import Account, Transaction, Debt, AccountInvitation
 logger = logging.getLogger(__name__)
 # Create your views here.
 def index(request):
@@ -56,7 +56,12 @@ def home(request):
     # TODO: get user accounts
     accounts = Account.objects.filter(users=request.user)
     account_create_form = AccountForm
-    return render(request, "ratata/home.html", {"account_create_form": account_create_form, "accounts":accounts})
+    invitations = AccountInvitation.objects.filter(user=request.user, status="N")
+    return render(request, "ratata/home.html", {
+        "account_create_form": account_create_form, 
+        "accounts":accounts,
+        "invitations": invitations,
+        })
 
 
 @login_required
@@ -230,9 +235,14 @@ def members(request, account_id):
                 username = form.cleaned_data["member"]
                 try:
                     user = User.objects.get(username=username)
-                    account.users.add(user)
-                    account.save()
-                    return return_trigger("newMember")
+                    matches = AccountInvitation.objects.filter(user=user, account=account)
+                    if not matches:
+                        AccountInvitation.objects.create(user=user, account=account)
+                    form = AccountMemberForm()
+                    return render(request, "ratata/components/account_members_create_form.html", {
+                        "account":account,
+                        "account_members_create_form": form,
+                        })
                 except:
                     error = "user not found"
                     form = AccountMemberForm()
@@ -255,6 +265,28 @@ def members_form(request, account_id):
     account = Account.objects.get(pk=account_id)
     form = AccountMemberForm(account=account)
     return render(request, "ratata/components/account_members_create_form.html", {"account": account, "account_members_create_form": form})
+
+def invitation_accept(request, invitation_id):
+    if request.method == "POST":
+        try:
+            invite = AccountInvitation.objects.get(pk=invitation_id)
+            logger.info(f"invite id: {invite.id}")
+            invite.status = "A"
+            invite.save()
+            account = Account.objects.get(pk=invite.account.id)
+            account.users.add(invite.user)
+            account.save()
+            return return_trigger("invitationUpdate")
+        except:
+            return render(request, "ratata/components/account_invitation_list.html", {"invitation": invite})
+    else:
+        invite = AccountInvitation.objects.get(pk=invitation_id)
+        return render(request, "ratata/components/account_invitation_list.html", {"invitation": invite})
+
+def invitation(request):
+    invites = AccountInvitation.objects.filter(user=request.user, status="N")
+    return render(request, "ratata/components/account_invitation_list.html", {"invitation": invites})
+
 
 def return_trigger(trigger:str) -> HttpResponse:
     response = HttpResponse()

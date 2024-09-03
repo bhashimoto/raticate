@@ -26,3 +26,14 @@ class Debt(models.Model):
     created_at = models.DateTimeField(auto_now=True)
     updated_at = models.DateTimeField(auto_now=True)
     amount = models.DecimalField(blank=False, default=0.0, decimal_places=2, max_digits=12)
+
+class AccountInvitation(models.Model):
+    INVITATION_STATUS = {
+        "N": "New",
+        "A": "Accepted",
+        "R": "Rejected",
+    }
+    user = models.ForeignKey(User, default=1, on_delete=models.CASCADE)
+    from_user = models.ForeignKey(User, default=1, related_name="from_user", on_delete=models.CASCADE)
+    account = models.ForeignKey(Account, default=1, on_delete=models.CASCADE)
+    status= models.CharField(max_length=1, choices=INVITATION_STATUS, default="N")

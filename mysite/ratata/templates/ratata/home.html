@@ -4,6 +4,7 @@
 {% block content %}
 
 <h1>Hello, {{ user.get_username }}</h1>
+{% include "ratata/components/account_invitation_list.html"%}
 <section class="card">
     <h2>Your Accounts</h2>
     {% include "ratata/components/accounts_list.html"%}
