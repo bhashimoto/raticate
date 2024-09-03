@@ -2,4 +2,7 @@
 	{% csrf_token %}
 	{{ account_members_create_form }}
 	<button class="btn btn-primary" type="submit" hx-post="/ratata/accounts/{{ account.id }}/members" hx-swap="none">Adicionar</button>
+	{% if error %}
+	<p>{{ error }}</p>
+	{% endif %}
 </form>

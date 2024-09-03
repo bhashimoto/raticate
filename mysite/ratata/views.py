@@ -64,7 +64,7 @@ def account(request, account_id):
     account = get_object_or_404(Account, pk=account_id)
     transactions = Transaction.objects.filter(account=account)
     transaction_form = TransactionForm(account=account)
-    members_form = AccountMemberForm(account=account)
+    members_form = AccountMemberForm()
     payments = calculate_payments(account=account)
     return render(request, "ratata/account.html", {
         "account": account, 
@@ -200,14 +200,23 @@ def calculate_payments(account):
 def members(request, account_id):
     if request.method == "POST":
         try:
-            account = Account.objects.get(pk=account_id)
-            form = AccountMemberForm(request.POST, account=account)
+            form = AccountMemberForm(request.POST)
             if form.is_valid():
-                users = form.cleaned_data["members"]
-                account.users.add(*users)
-                account.save()
-                
-                return return_trigger("newMember")
+                account = Account.objects.get(pk=account_id)
+                username = form.cleaned_data["member"]
+                try:
+                    user = User.objects.get(username=username)
+                    account.users.add(user)
+                    account.save()
+                    return return_trigger("newMember")
+                except:
+                    error = "user not found"
+                    form = AccountMemberForm()
+                    return render(request, "ratata/components/account_members_create_form.html", {
+                        "account":account,
+                        "account_members_create_form": form,
+                        "error": error
+                        })
         except:
             return HttpResponse("error")
     else:
