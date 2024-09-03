@@ -136,10 +136,10 @@ def calculate_payments(account):
     for debt in debts:
         if debt.who_owes not in debts_summary:
             debts_summary[debt.who_owes] = {"owes": 0, "is_owed": 0}
-        if debt.paid_by not in debts_summary:
-            debts_summary[debt.paid_by] = {"owes": 0, "is_owed": 0}
+        if debt.transaction.paid_by not in debts_summary:
+            debts_summary[debt.transaction.paid_by] = {"owes": 0, "is_owed": 0}
         debts_summary[debt.who_owes]["owes"] += debt.amount
-        debts_summary[debt.paid_by]["is_owed"] += debt.amount
+        debts_summary[debt.transaction.paid_by]["is_owed"] += debt.amount
     
     # only one user in account, there is no calculation to be made
     if len(debts_summary) < 2:
