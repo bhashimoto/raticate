@@ -91,6 +91,16 @@ def accounts(request):
         return render(request, "ratata/components/accounts_list.html", {"accounts": accounts})
 
 @login_required
+def transaction_form(request, account_id):
+    try:
+        account = Account.objects.get(pk=account_id)
+        form = TransactionForm(account=account)
+        return render(request, "ratata/components/transaction_create_form.html", {"account": account, "transaction_create_form": form, "error": err})
+    except:
+        return HttpResponse("error loading form")
+
+
+@login_required
 def transactions(request, account_id):
     if request.method == "POST":
         try:
@@ -106,19 +116,33 @@ def transactions(request, account_id):
                                                          account=account,
                                                          paid_by=paid_by)
 
-                create_debts(members=members, paid_by=paid_by, transaction=transaction, amount=amount)
+                create_debts(members=members, transaction=transaction, amount=amount)
 
-                return return_trigger("newTransaction")
-        except:
-            return HttpResponse("error")
+                form = TransactionForm(account=account)
+                response = render(request, "ratata/components/transaction_create_form.html", {"account": account, "transaction_create_form": form})
+                response.headers["HX-Trigger"] = "newTransaction"
+                return response
+            else:
+                form = TransactionForm(account=account)
+                err = "invalid form data. please verify inputs"
+                return render(request, "ratata/components/transaction_create_form.html", {"account": account, "transaction_create_form": form, "error": err})
+        except Exception as ex:
+            logger.info("raised exception", ex)
+            return HttpResponse(ex)
     else:
         transactions = Transaction.objects.filter(account = Account.objects.get(pk=account_id))
         return render(request, "ratata/components/transactions_list.html", {"transactions": transactions})
 
-def create_debts(members, paid_by, transaction, amount):
+def create_debts(members, transaction, amount):
     num_members = len(members)
+    value_cents = amount*100
+    rest = (value_cents % num_members)/100
+    debt = None
     for member in members:
-        Debt.objects.create(transaction=transaction, who_owes=member, paid_by=paid_by, amount=(amount/num_members))
+        debt = Debt.objects.create(transaction=transaction, who_owes=member, amount=(value_cents//num_members)/100)
+    if rest:
+        debt.amount += rest
+        debt.save()
         
 @login_required
 def payments(request, account_id):

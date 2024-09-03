@@ -16,7 +16,7 @@ class SignupForm(forms.Form):
 
 class TransactionForm(forms.Form):
     description = forms.CharField(label="description", max_length=200)
-    amount = forms.DecimalField(label="amount")
+    amount = forms.DecimalField(label="amount", decimal_places=2)
     paid_by = forms.ModelChoiceField(label="paid by", queryset=None)
     members = forms.ModelMultipleChoiceField(label="Split between", queryset=None, widget=forms.CheckboxSelectMultiple())
     def __init__(self, *args, **kwargs):
