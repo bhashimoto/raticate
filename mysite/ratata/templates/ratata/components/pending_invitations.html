@@ -1,0 +1,10 @@
+<div hx-get="/ratata/accounts/{{ account.id }}/invitations" hx-trigger="newMember from:body" hx-swap="outerHTML">
+    {% if invitations %}
+        <h3>Pending invitations</h3>
+        <ul class="no-bullet">	
+        {% for invitation in invitations %}
+            <li>{{ invitation.user.username }}</li>
+        {% endfor %}
+        </ul>
+    {% endif %}
+</div>

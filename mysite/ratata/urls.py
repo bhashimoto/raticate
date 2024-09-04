@@ -14,6 +14,7 @@ urlpatterns = [
     path("accounts/<int:account_id>/payments", views.payments, name="payments"),
     path("accounts/<int:account_id>/members", views.members, name="members"),
     path("accounts/<int:account_id>/members_form", views.members_form, name="members_form"),
+    path("accounts/<int:account_id>/invitations", views.pending_invitations, name="pending_invitations"),
     path("invitations/<int:invitation_id>", views.invitation_accept, name="invitation_accept"),
     path("invitations", views.invitation, name="invitation"),
 ]

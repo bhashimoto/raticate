@@ -1,4 +1,4 @@
-<div hx-get="/ratata/accounts/{{account.id}}/members" hx-trigger="newMember from:body">
+<div hx-get="/ratata/accounts/{{account.id}}/members" hx-trigger="newMember from:body" hx-swap="outerHTML">
 	{% if not account.users.all %}
 	No members found for this account, start adding people!
 	{% else %}

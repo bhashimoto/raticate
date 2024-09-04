@@ -14,6 +14,20 @@ body {
 	font-family: Arial, Helvetica, sans-serif;
 }
 
+nav {
+	padding: 0px 10px;
+	display: flex;
+	flex-direction: row;
+	justify-content: space-between;
+	align-items: center;
+}
+
+a.home-button {
+	font-size: 3rem;
+	font-weight: 600;
+	text-decoration: none;
+}
+
 main {
 	margin: 10px;
 }
