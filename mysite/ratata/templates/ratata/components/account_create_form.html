@@ -1,5 +1,5 @@
 <form>
 	{% csrf_token %}
 	{{ account_create_form }}
-	<button type="submit" class="btn btn-primary" hx-post="/ratata/accounts/" hx-swap="none">Create</button>
+	<button type="submit" class="btn btn-primary" hx-post="/ratata/accounts/" hx-target="closest form">Create</button>
 </form>

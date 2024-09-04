@@ -1,4 +1,4 @@
-<ul id="accounts_list" class="no-bullet" hx-get="/ratata/accounts" hx-trigger="newAccount,invitationUpdate from:body"  hx-swap="outerHTML">
+<ul id="accounts_list" class="no-bullet" hx-get="/ratata/accounts" hx-trigger="newAccount from:body,invitationUpdate from:body"  hx-swap="outerHTML">
 	{% for account in accounts %}
 	<li><a href="/ratata/accounts/{{account.id}}">{{ account.name }}</a></li>
 	{% endfor %}

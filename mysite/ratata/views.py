@@ -90,7 +90,10 @@ def accounts(request):
             account.users.add(request.user)
             account.save()
 
-            return return_trigger("newAccount")
+            account_create_form = AccountForm()
+            response = render(request, "ratata/components/account_create_form.html", {"account_create_form": account_create_form})
+            response.headers["HX-Trigger"] = "newAccount"
+            return response
     else:
         accounts = Account.objects.filter(users=request.user)
         return render(request, "ratata/components/accounts_list.html", {"accounts": accounts})
