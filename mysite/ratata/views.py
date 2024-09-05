@@ -268,7 +268,7 @@ def members(request, account_id):
     else:
         try:
             account = Account.objects.get(pk=account_id)
-            members = AccountUser.objects.filter(account=account)
+            members = AccountUser.objects.filter(account=account, active=True)
             return render(request, "ratata/components/account_members_list.html", {"account":account, "members":members})
         except:
             return HttpResponse("error")

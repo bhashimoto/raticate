@@ -3,25 +3,25 @@
 
 {% block content %}
 <h1>{{account.name}}</h1>
-<section class="card">
-		<h2>Membros</h2>
-		{% include "ratata/components/account_members_list.html" %}
-		
-		{% include "ratata/components/pending_invitations.html" %}
-		
-		{% include "ratata/components/account_members_create_form.html" %}
-</section>
-
-<section class="card">
-		<h2>Resumo</h2>
-		{% include "ratata/components/account_payment_summary.html" %}
-</section>
-
-<section class="card">
-	<h2>Transações</h2>
-	{% include "ratata/components/transaction_create_form.html"%}
-	{% include "ratata/components/transactions_list.html" %}
-</section>
-
-
+<div class="content_container">
+	<aside>
+		<section class="card">
+			<h2>Membros</h2>
+			{% include "ratata/components/account_members_list.html" %}
+			{% include "ratata/components/pending_invitations.html" %}
+			{% include "ratata/components/account_members_create_form.html" %}
+		</section>
+	</aside>
+	<div class="main_content">
+		<section class="card">
+				<h2>Resumo</h2>
+				{% include "ratata/components/account_payment_summary.html" %}
+		</section>
+		<section class="card">
+			<h2>Transações</h2>
+			{% include "ratata/components/transaction_create_form.html"%}
+			{% include "ratata/components/transactions_list.html" %}
+		</section>
+	</div>
+<div>
 {% endblock %}

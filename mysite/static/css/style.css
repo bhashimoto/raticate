@@ -16,10 +16,25 @@ body {
 
 nav {
 	padding: 0px 10px;
+	background-color: #222;
 	display: flex;
 	flex-direction: row;
 	justify-content: space-between;
 	align-items: center;
+}
+
+.content_container {
+	display: flex;
+	flex-direction: row;
+}
+
+aside {
+	flex-grow: 1;
+	display: flex;
+}
+
+.main_content {
+	flex-grow: 3;
 }
 
 a.home-button {
@@ -102,9 +117,10 @@ button {
 
 .card {
 	margin: 10px 10px;
-	padding: 5px 10px 10px 10px;
+	padding: 5px 15px 15px 15px;
 	background-color: var(--background);
 	border-radius: 10px;
+	flex-grow: 1;
 }
 
 .card>h2 {
