@@ -6,7 +6,7 @@ from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required
 
 from .forms import AccountForm, AccountMemberForm, LoginForm, SignupForm, TransactionForm
-from .models import Account, Transaction, Debt, AccountInvitation
+from .models import Account, Transaction, Debt, AccountInvitation, AccountUser
 logger = logging.getLogger(__name__)
 # Create your views here.
 
@@ -57,7 +57,7 @@ def user_logout(request):
 @login_required
 def home(request):
     # TODO: get user accounts
-    accounts = Account.objects.filter(users=request.user)
+    accounts = AccountUser.objects.filter(user=request.user)
     account_create_form = AccountForm
     invitations = AccountInvitation.objects.filter(user=request.user, status="N")
     return render(request, "ratata/home.html", {
@@ -70,6 +70,7 @@ def home(request):
 @login_required
 def account(request, account_id):
     account = get_object_or_404(Account, pk=account_id)
+    members = AccountUser.objects.filter(account=account)
     transactions = Transaction.objects.filter(account=account)
     transaction_form = TransactionForm(account=account)
     members_form = AccountMemberForm()
@@ -77,6 +78,7 @@ def account(request, account_id):
     pending_invites = AccountInvitation.objects.filter(account=account, status="N")
     return render(request, "ratata/account.html", {
         "account": account, 
+        "members": members,
         "transactions":transactions , 
         "transaction_create_form": transaction_form,
         "account_members_create_form": members_form,
@@ -92,15 +94,14 @@ def accounts(request):
         if form.is_valid():
             account = Account(name=form.cleaned_data["account_name"])
             account.save()
-            account.users.add(request.user)
-            account.save()
+            AccountUser.objects.create(user=request.user,account=account)
 
             account_create_form = AccountForm()
             response = render(request, "ratata/components/account_create_form.html", {"account_create_form": account_create_form})
             response.headers["HX-Trigger"] = "newAccount"
             return response
     else:
-        accounts = Account.objects.filter(users=request.user)
+        accounts = AccountUser.objects.filter(user=request.user)
         return render(request, "ratata/components/accounts_list.html", {"accounts": accounts})
 
 @login_required
@@ -165,7 +166,8 @@ def payments(request, account_id):
 
 def calculate_payments(account):
     # 0 or 1 users, nothing to do
-    if len(account.users.all())< 2:
+    users = AccountUser.objects.filter(account=account)
+    if len(users)< 2:
         return []
 
     debts = Debt.objects.filter(transaction__in = Transaction.objects.filter(account=account))
@@ -266,7 +268,8 @@ def members(request, account_id):
     else:
         try:
             account = Account.objects.get(pk=account_id)
-            return render(request, "ratata/components/account_members_list.html", {"account":account})
+            members = AccountUser.objects.filter(account=account)
+            return render(request, "ratata/components/account_members_list.html", {"account":account, "members":members})
         except:
             return HttpResponse("error")
 
@@ -285,8 +288,7 @@ def invitation_accept(request, invitation_id):
             invite.status = "A"
             invite.save()
             account = Account.objects.get(pk=invite.account.id)
-            account.users.add(invite.user)
-            account.save()
+            AccountUser.objects.create(user=invite.user, account=account)
             return return_trigger("invitationUpdate")
         except:
             return render(request, "ratata/components/account_invitation_list.html", {"invitation": invite})

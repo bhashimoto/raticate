@@ -1,10 +1,10 @@
 <div hx-get="/ratata/accounts/{{account.id}}/members" hx-trigger="newMember from:body" hx-swap="outerHTML">
-	{% if not account.users.all %}
+	{% if not members %}
 	No members found for this account, start adding people!
 	{% else %}
 	<ul class="no-bullet">
-		{% for member in account.users.all %}
-		<li>{{ member.username }}</li>
+		{% for member in members %}
+		<li>{{ member.user.username }}</li>
 		{% endfor %}
 	</ul>
 	{% endif %}

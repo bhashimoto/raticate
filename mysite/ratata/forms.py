@@ -1,5 +1,7 @@
 from django import forms
 from django.contrib.auth.models import User
+from .models import AccountUser
+from django.db.models import Subquery
 
 
 class AccountForm(forms.Form):
@@ -22,8 +24,11 @@ class TransactionForm(forms.Form):
     def __init__(self, *args, **kwargs):
         account = kwargs.pop('account')
         super().__init__(*args, **kwargs)
-        self.fields['members'].queryset = account.users.all()
-        self.fields['paid_by'].queryset = account.users.all()
+
+        users_pk = AccountUser.objects.filter(account=account).values_list('user')
+        self.fields['members'].queryset = User.objects.filter(pk__in=users_pk)
+        self.fields['paid_by'].queryset = User.objects.filter(pk__in=users_pk)
+
 
 class AccountMemberForm(forms.Form):
     member = forms.CharField(label="username", max_length=150)
