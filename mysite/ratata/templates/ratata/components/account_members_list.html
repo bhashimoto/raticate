@@ -1,6 +1,6 @@
 <div hx-get="/ratata/accounts/{{account.id}}/members" hx-trigger="newMember from:body" hx-swap="outerHTML">
 	{% if not members %}
-	No members found for this account, start adding people!
+	Nenhum membro encontrado, adicione pessoas para começar!
 	{% else %}
 	<ul class="no-bullet">
 		{% for member in members %}

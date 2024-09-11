@@ -1,11 +1,11 @@
 <table hx-get="/ratata/accounts/{{ account.id }}/transactions" hx-trigger="newTransaction from:body">
 	{% if transactions %}
 	<tr>
-		<th>Date</th>
-		<th>Description</th>
-		<th>Value</th>
-		<th>Paid By</th>
-		<th>Split between</th>
+		<th>Data</th>
+		<th>Descrição</th>
+		<th>Valor</th>
+		<th>Pago por</th>
+		<th>Dividir entre</th>
 	</tr>
 	{% for transaction in transactions%}
 	<tr>

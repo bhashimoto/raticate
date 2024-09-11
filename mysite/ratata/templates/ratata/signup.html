@@ -1,11 +1,11 @@
 {% extends 'ratata/base.html' %}
 
-{% block title %}Sign up{% endblock %}
+{% block title %}Registrar{% endblock %}
 
 {% block content %}
 <form action="" method="post">
 	{% csrf_token %}
 	{{ signup_form }}
-	<button class="btn btn-primary" type="submit">Register</button>
+	<button class="btn btn-primary" type="submit">Registrar</button>
 </form>
 {% endblock %}

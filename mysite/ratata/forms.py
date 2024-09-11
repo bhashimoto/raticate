@@ -5,22 +5,25 @@ from django.db.models import Subquery
 
 
 class AccountForm(forms.Form):
-    account_name = forms.CharField(label="Account name", max_length=200)
+    account_name = forms.CharField(label="Nome da Conta", max_length=200)
 
 class LoginForm(forms.Form):
-    username = forms.CharField(label="username", max_length=200)
+    username = forms.CharField(label="usuário", max_length=200)
     password = forms.CharField(widget=forms.PasswordInput())
 
 class SignupForm(forms.Form):
-    username = forms.CharField(label="username", max_length=200)
+    username = forms.CharField(label="usuário", max_length=200)
     email = forms.EmailField(label="email")
-    password = forms.CharField(label="password", widget=forms.PasswordInput())
+    firstname = forms.CharField(label="firstname")
+    lastname= forms.CharField(label="lastname")
+    pix = forms.CharField(label="chave pix", max_length=200, required=False)
+    password = forms.CharField(label="senha", widget=forms.PasswordInput())
 
 class TransactionForm(forms.Form):
-    description = forms.CharField(label="description", max_length=200)
-    amount = forms.DecimalField(label="amount", decimal_places=2)
-    paid_by = forms.ModelChoiceField(label="paid by", queryset=None)
-    members = forms.ModelMultipleChoiceField(label="Split between", queryset=None, widget=forms.CheckboxSelectMultiple())
+    description = forms.CharField(label="descrição", max_length=200)
+    amount = forms.DecimalField(label="valor", decimal_places=2)
+    paid_by = forms.ModelChoiceField(label="pago por", queryset=None)
+    members = forms.ModelMultipleChoiceField(label="Dividir entre", queryset=None, widget=forms.CheckboxSelectMultiple())
     def __init__(self, *args, **kwargs):
         account = kwargs.pop('account')
         super().__init__(*args, **kwargs)
@@ -31,4 +34,4 @@ class TransactionForm(forms.Form):
 
 
 class AccountMemberForm(forms.Form):
-    member = forms.CharField(label="username", max_length=150)
+    member = forms.CharField(label="usuário", max_length=150)

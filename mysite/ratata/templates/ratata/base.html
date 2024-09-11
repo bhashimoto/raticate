@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 {% load static %}
-<html lang="en">
+<html lang="pt-br">
 	<head>
 		<title>{% block title %}{% endblock%}</title>
 		<meta charset="UTF-8">
@@ -12,7 +12,7 @@
 		<nav>
 			<a class="home-button" href={%if not user.is_authenticated%}"/ratata"{%else%}"/ratata/home"{%endif%}>Ratata</a>
 			{% if user.is_authenticated %}
-			<a href="/ratata/logout">log out</a>
+			<a href="/ratata/logout">Sair</a>
 			{% endif %}
 		</nav>
 		<main>

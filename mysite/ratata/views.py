@@ -11,7 +11,7 @@ import qrcode
 from crc import Calculator, Crc16
 
 from .forms import AccountForm, AccountMemberForm, LoginForm, SignupForm, TransactionForm
-from .models import Account, Transaction, Debt, AccountInvitation, AccountUser
+from .models import Account, Transaction, Debt, AccountInvitation, AccountUser, UserInfo
 logger = logging.getLogger(__name__)
 # Create your views here.
 
@@ -28,8 +28,12 @@ def user_signup(request):
             username = form.cleaned_data["username"]
             email = form.cleaned_data["email"]
             password = form.cleaned_data["password"]
-            User.objects.create_user(username=username, email=email, password=password)
+            first_name = form.cleaned_data["firstname"]
+            last_name = form.cleaned_data["lastname"]
+            pix_key = form.cleaned_data["pix"]
+            User.objects.create_user(username=username, email=email, password=password, first_name=first_name, last_name=last_name)
             user = authenticate(request, username=username, password=password)
+            UserInfo.objects.create(user=user, pix_key=pix_key )
             if user is not None:
                 login(request, user, backend=None)
                 return redirect("home")
@@ -82,7 +86,15 @@ def account(request, account_id):
     payments = calculate_payments(account=account)
     pending_invites = AccountInvitation.objects.filter(account=account, status="N")
 
-    image = generate_pix_qr("13668474745", payments[0]["amount"], "Bruno Hashimoto", "Rio de Janeiro")
+    pix = None
+    if request.user in payments.keys(): 
+        payment = payments[request.user]
+        target = User.objects.get(username=payment["to"])
+        info = UserInfo.objects.get(user = target)
+
+        pix = generate_pix_qr(info.pix_key, float(payment['amount'])," ".join([request.user.first_name, request.user.last_name]), "Rio de Janeiro")
+
+    #pix = None #generate_pix_qr("13668474745", 25.00, "Bruno Hashimoto", "Rio de Janeiro")
     return render(request, "ratata/account.html", {
         "account": account, 
         "members": members,
@@ -91,7 +103,7 @@ def account(request, account_id):
         "account_members_create_form": members_form,
         "payments": payments,
         "invitations": pending_invites,
-        "pix": image.decode()
+        "pix": pix
     })
 
 def generate_pix_qr(key, amount, name, city):
@@ -107,8 +119,11 @@ def generate_pix_qr(key, amount, name, city):
     buffered = BytesIO()
     img.save(buffered)
     img_string = base64.b64encode(buffered.getvalue())
-    
-    return img_string
+    ret = {
+        "code": code,
+        "image": img_string.decode(),
+    }
+    return ret 
 
 
 def add_length(string):
@@ -172,8 +187,9 @@ def transactions(request, account_id):
             logger.info("raised exception", ex)
             return HttpResponse(ex)
     else:
-        transactions = Transaction.objects.filter(account = Account.objects.get(pk=account_id))
-        return render(request, "ratata/components/transactions_list.html", {"transactions": transactions})
+        account = Account.objects.get(pk=account_id)
+        transactions = Transaction.objects.filter(account=account)
+        return render(request, "ratata/components/transactions_list.html", {"account":account,"transactions": transactions})
 
 def create_debts(members, transaction, amount):
     num_members = len(members)
@@ -190,7 +206,22 @@ def create_debts(members, transaction, amount):
 def payments(request, account_id):
     account = Account.objects.get(pk=account_id)
     payments = calculate_payments(account=account)
-    return render(request, "ratata/components/account_payment_summary.html", {"payments":payments})
+    return render(request, "ratata/components/account_payment_summary.html", {"account":account, "payments":payments})
+
+@login_required
+def payment(request, account_id, user_id):
+    account = Account.objects.get(pk=account_id)
+    payments = calculate_payments(account=account)
+    user = User.objects.get(pk=user_id)
+    pix = None
+    if user in payments.keys(): 
+        payment = payments[user]
+        target = User.objects.get(username=payment["to"])
+        info = UserInfo.objects.get(user = target)
+
+        pix = generate_pix_qr(info.pix_key, float(payment['amount'])," ".join([user.first_name, user.last_name]), "Rio de Janeiro")
+    return render(request, "ratata/components/pix.html", {"account":account, "pix": pix})    
+
 
 def calculate_payments(account):
     # 0 or 1 users, nothing to do
@@ -258,8 +289,16 @@ def calculate_payments(account):
             tally[pay_from][1] -= tally[pay_to][1]
             tally[pay_to][1] = 0
             pay_to += 1
+    
+    ret = {}
+    for payment in payments:
+        ret[payment["from"]] = {
+            "to": payment["to"],
+            "amount": payment["amount"]
+        }
 
-    return payments
+
+    return ret 
 
 
 

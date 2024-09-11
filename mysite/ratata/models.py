@@ -44,3 +44,8 @@ class AccountInvitation(models.Model):
     from_user = models.ForeignKey(User, default=1, related_name="from_user", on_delete=models.CASCADE)
     account = models.ForeignKey(Account, default=1, on_delete=models.CASCADE)
     status= models.CharField(max_length=1, choices=INVITATION_STATUS, default="N")
+
+class UserInfo(models.Model):
+    user = models.OneToOneField(User, on_delete=models.CASCADE)
+    pix_key = models.TextField(max_length=200, blank=True)
+    name = models.TextField(max_length=200, blank=True)

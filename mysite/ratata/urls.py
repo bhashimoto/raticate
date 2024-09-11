@@ -12,6 +12,7 @@ urlpatterns = [
     path("accounts/<int:account_id>/transactions", views.transactions, name="transactions"),
     path("accounts/<int:account_id>/transaction_form", views.transaction_form, name="transaction_form"),
     path("accounts/<int:account_id>/payments", views.payments, name="payments"),
+    path("accounts/<int:account_id>/payments/<int:user_id>", views.payment, name="payment"),
     path("accounts/<int:account_id>/members", views.members, name="members"),
     path("accounts/<int:account_id>/members_form", views.members_form, name="members_form"),
     path("accounts/<int:account_id>/invitations", views.pending_invitations, name="pending_invitations"),

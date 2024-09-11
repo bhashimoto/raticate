@@ -1,0 +1,18 @@
+<div hx-get="/ratata/accounts/{{account.id}}/payments/{{user.id}}" hx-trigger="newTransaction from:body">
+    {% if pix %}
+		<img src="data:image/png;base64,{{pix.image}}">
+		<button class="btn btn-primary pix-qr" onclick="copy()">Copy</button>
+    {% endif %}
+</div>
+<script>
+	async function copy() {
+		try {
+			var code = "{{pix.code}}"
+			await navigator.clipboard.writeText(code);
+			console.log("copy done")
+		} catch (err) {
+			console.error("failed to copy: ", err)
+			alert(err)
+		}
+	}
+</script>
