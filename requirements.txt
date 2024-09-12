@@ -1,3 +1,5 @@
 django
 qrcode
 crc
+psycopg[binary]
+gunicorn
