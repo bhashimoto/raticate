@@ -3,3 +3,4 @@ qrcode
 crc
 psycopg[binary]
 gunicorn
+python-dotenv
