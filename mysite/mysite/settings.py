@@ -85,6 +85,10 @@ DATABASES = {
         'PASSWORD': os.getenv('DJANGO_DB_PASSWORD', 'mypassword'),
         'HOST': os.getenv('DJANGO_DB_HOST', 'localhost'),
         'PORT': os.getenv('DJANGO_DB_PORT', '5432'),
+        'OPTIONS': {
+            'options': '-c search_path=public',
+            'sslmode': 'require',
+            },
     }
 }
 
