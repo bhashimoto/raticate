@@ -227,7 +227,7 @@ def calculate_payments(account):
     # 0 or 1 users, nothing to do
     users = AccountUser.objects.filter(account=account)
     if len(users)< 2:
-        return []
+        return {}
 
     debts = Debt.objects.filter(transaction__in = Transaction.objects.filter(account=account))
     debts_summary = {}
@@ -241,7 +241,7 @@ def calculate_payments(account):
     
     # only one user in account, there is no calculation to be made
     if len(debts_summary) < 2:
-        return []
+        return {}
 
     tally = []
     for user in debts_summary:
