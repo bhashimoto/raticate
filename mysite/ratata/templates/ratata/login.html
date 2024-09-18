@@ -2,7 +2,7 @@
 {% block title %}Entrar{% endblock %}
 
 {% block content %}
-<form action="" method="post">
+<form action="" method="post" id="signup-login">
 	{% csrf_token %}
 	{{ form }}
 	<input class="btn btn-primary" type="submit" name="login" value="Log In">
