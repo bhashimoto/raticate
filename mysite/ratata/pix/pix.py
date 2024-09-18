@@ -4,7 +4,11 @@ import qrcode
 from crc import Calculator, Crc16
 import re
 
-def generate_pix_qr(key, amount, name, city):
+def generate_pix_qr(key:str, amount:float, name:str, city:str) -> tuple[dict | None, Exception|None]:
+    valid, key = validate_key(key)
+    if not valid:
+        return (None, Exception)
+
     merchant_account_info = "0014br.gov.bcb.pix" + f"01{add_length(key)}"
     amount_string = f"{amount:.2f}"
     pre_crc = f"00020126" + add_length(merchant_account_info) + "52040000530398654" + add_length(amount_string) + "5802BR59" + add_length(name) +"60" + add_length(city) + "6304"
@@ -21,7 +25,7 @@ def generate_pix_qr(key, amount, name, city):
         "code": code,
         "image": img_string.decode(),
     }
-    return ret 
+    return (ret, None) 
 
 def validate_key(key:str) -> tuple[bool, str]: 
     """Checks if the given string is a valid pix key and returns the key correctly formatted.

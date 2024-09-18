@@ -90,7 +90,9 @@ def account(request, account_id):
         target = User.objects.get(username=payment["to"])
         info = UserInfo.objects.get(user = target)
 
-        pix = generate_pix_qr(info.pix_key, float(payment['amount'])," ".join([request.user.first_name, request.user.last_name]), "Rio de Janeiro")
+        pix, err = generate_pix_qr(info.pix_key, float(payment['amount'])," ".join([request.user.first_name, request.user.last_name]), "Rio de Janeiro")
+        if err:
+            pix = None
 
     #pix = None #generate_pix_qr("13668474745", 25.00, "Bruno Hashimoto", "Rio de Janeiro")
     return render(request, "ratata/account.html", {
