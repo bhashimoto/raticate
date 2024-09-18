@@ -8,7 +8,7 @@ from django.contrib.auth.decorators import login_required
 
 from .forms import AccountForm, AccountMemberForm, LoginForm, SignupForm, TransactionForm
 from .models import Account, Transaction, Debt, AccountInvitation, AccountUser, UserInfo
-from .pix import generate_pix_qr
+from .pix import generate_pix_qr, validate_key
 
 logger = logging.getLogger(__name__)
 # Create your views here.
@@ -29,6 +29,14 @@ def user_signup(request):
             first_name = form.cleaned_data["firstname"]
             last_name = form.cleaned_data["lastname"]
             pix_key = form.cleaned_data["pix"]
+            valid, key = validate_key(pix_key)
+            if not valid:
+                logger.info(f"invalid pix key: {pix_key}")
+                pix_key = None
+                error = "Chave Pix inválida"
+                return render(request, "ratata/signup.html", {"signup_form": form, "error": error })
+            else:
+                pix_key = key
             User.objects.create_user(username=username, email=email, password=password, first_name=first_name, last_name=last_name)
             user = authenticate(request, username=username, password=password)
             UserInfo.objects.create(user=user, pix_key=pix_key )
