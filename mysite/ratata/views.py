@@ -1,5 +1,3 @@
-import base64
-from io import BytesIO
 import logging
 from django.contrib.auth.models import User
 from django.http import HttpResponse
@@ -7,11 +5,11 @@ from django.shortcuts import get_object_or_404, render, redirect
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required
 
-import qrcode
-from crc import Calculator, Crc16
 
 from .forms import AccountForm, AccountMemberForm, LoginForm, SignupForm, TransactionForm
 from .models import Account, Transaction, Debt, AccountInvitation, AccountUser, UserInfo
+from .pix import generate_pix_qr
+
 logger = logging.getLogger(__name__)
 # Create your views here.
 
@@ -92,7 +90,9 @@ def account(request, account_id):
         target = User.objects.get(username=payment["to"])
         info = UserInfo.objects.get(user = target)
 
-        pix = generate_pix_qr(info.pix_key, float(payment['amount'])," ".join([request.user.first_name, request.user.last_name]), "Rio de Janeiro")
+        pix, err = generate_pix_qr(info.pix_key, float(payment['amount'])," ".join([request.user.first_name, request.user.last_name]), "Rio de Janeiro")
+        if err:
+            pix = None
 
     #pix = None #generate_pix_qr("13668474745", 25.00, "Bruno Hashimoto", "Rio de Janeiro")
     return render(request, "ratata/account.html", {
@@ -106,28 +106,6 @@ def account(request, account_id):
         "pix": pix
     })
 
-def generate_pix_qr(key, amount, name, city):
-    merchant_account_info = "0014br.gov.bcb.pix" + f"01{add_length(key)}"
-    amount_string = f"{amount:.2f}"
-    pre_crc = f"00020126" + add_length(merchant_account_info) + "52040000530398654" + add_length(amount_string) + "5802BR59" + add_length(name) +"60" + add_length(city) + "6304"
-    
-    calculator = Calculator(Crc16.IBM_3740)
-    cs = calculator.checksum(pre_crc.encode())
-
-    code = pre_crc + hex(cs).encode().decode()[2:].upper()
-    img = qrcode.make(code)
-    buffered = BytesIO()
-    img.save(buffered)
-    img_string = base64.b64encode(buffered.getvalue())
-    ret = {
-        "code": code,
-        "image": img_string.decode(),
-    }
-    return ret 
-
-
-def add_length(string):
-    return f"{len(string):02d}{string}"
 
 
 @login_required

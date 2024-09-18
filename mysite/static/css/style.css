@@ -135,3 +135,16 @@ button {
 .no-bullet {
 	list-style: none;
 }
+
+.pix-img {
+	width: auto;
+	height: auto;
+	max-width: 250px;
+	max-height: 250px;
+	aspect-ratio: initial;
+}
+
+.flex-col {
+	display: flex;
+	flex-direction: column;
+}
