@@ -1,0 +1,15 @@
+{% extends 'blog/base.html' %}
+
+{% block title%}{{post.title}}{% endblock %}
+
+{% block content %}
+<section class="card">
+    <h1>{{ post.title }}</h1>
+    <i id="publish_date">Published at: {{post.published_at|date:"Y-m-d"}}</i>
+    <br>
+    <article>
+        {{ post.html | safe }}
+    </article>
+
+</section>
+{% endblock %}
