@@ -1,0 +1,22 @@
+{% extends 'blog/base.html' %}
+
+{% block title%}Blog{% endblock %}
+
+{% block content %}
+{% if posts|length > 0 %}
+    {% for post in posts %}
+    <section class="card">
+        <h2>{{ post.title }}</h2>
+        <article>
+            {{ post.html | safe | truncatechars:120 }}
+            <br>
+            <a href="/blog/{{post.id}}">read more...</a>
+        </article>
+
+    </section>
+    {% endfor %}
+{% else %}
+    No posts available
+{% endif %}
+
+{% endblock %}

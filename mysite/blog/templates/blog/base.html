@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+{% load static %}
+<html lang="pt-br">
+	<head>
+		<title>{% block title %}{% endblock%}</title>
+		<meta charset="UTF-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1">
+		<link href={% static 'css/style.css' %} rel="stylesheet">
+		<script src="https://unpkg.com/htmx.org@2.0.2"></script>
+	</head>
+	<body>
+		<nav>
+			<a class="home-button" href="/blog">Blog</a>
+		</nav>
+		<main>
+		{% block content %}
+		{% endblock %}
+		</main>
+	</body>
+</html>
+
