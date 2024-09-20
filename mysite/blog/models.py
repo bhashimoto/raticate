@@ -10,7 +10,7 @@ class Post(models.Model):
     author = models.ForeignKey(User, on_delete=models.PROTECT, null=True)
     created_at = models.DateTimeField(auto_now=True)
     updated_at = models.DateTimeField(auto_now=True)
-    published_at = models.DateTimeField()
+    published_at = models.DateTimeField(null=True, blank=True)
 
     @property
     def html(self):
