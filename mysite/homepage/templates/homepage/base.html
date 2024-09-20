@@ -9,6 +9,15 @@
 		<script src="https://unpkg.com/htmx.org@2.0.2"></script>
 	</head>
 	<body>
+		<nav>
+			<a class="home-button" href="/">Bruno</a>
+			<div class="links">
+				<a href="/blog">Blog</a>
+			</div>
+			<div class="right">
+				<a href="https://github.com/bhashimoto"><img height="36" src="{% static 'img/github-logo.png' %}"></img></a>
+			</div>
+		</nav>
 		<main>
 		{% block content %}
 		{% endblock %}

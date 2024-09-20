@@ -23,6 +23,35 @@ nav {
 	align-items: center;
 }
 
+nav > * {
+	flex-grow: 1;
+	justify-content: space-between;
+	max-width: 30%;
+}
+
+section {
+	display: flex;
+	flex-direction: column;
+	gap: 5px;
+}
+
+div.links{
+	display: flex;
+	align-items: center;
+	justify-content: space-around;
+}
+
+.links > a {
+	text-align: center;
+	align-self: center;
+}
+
+.right {
+	display: flex;
+	justify-content: right;
+
+}
+
 .content_container {
 	display: flex;
 	flex-direction: row;
@@ -38,13 +67,13 @@ aside {
 }
 
 a.home-button {
-	font-size: 3rem;
+	font-size: 2.5rem;
 	font-weight: 600;
 	text-decoration: none;
 }
 
 main {
-	margin: 10px;
+	padding: 10px;
 }
 
 h1 {
@@ -57,6 +86,8 @@ ul {
 
 header {
 	text-align: center;
+	min-height: 15rem;
+	padding-top: 4rem;
 }
 
 form {
@@ -123,7 +154,6 @@ button {
 }
 
 .card {
-	margin: 10px 10px;
 	padding: 5px 15px 15px 15px;
 	background-color: var(--background);
 	border-radius: 10px;
