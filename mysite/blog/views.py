@@ -7,7 +7,8 @@ from .models import Post
 logger = logging.getLogger(__name__)
 # Create your views here.
 def index(request):
-    posts = Post.objects.all().order_by("-published_at")[:5]
+    posts = Post.objects.filter(published_at__isnull=False).order_by("-published_at")[:5]
+
     return render(request, 'blog/index.html', {"posts": posts})
 
 def post_details(request, post_id):
